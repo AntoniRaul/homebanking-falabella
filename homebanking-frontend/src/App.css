@@ -1,0 +1,532 @@
+:root {
+    --verde: #4CA82F;
+    --verde-oscuro: #2F6E2B;
+    --verde-claro: #eaf6e6;
+    --negro: #1a1a1a;
+    --gris-texto: #4a4a4a;
+    --gris-borde: #e0e0e0;
+    --gris-fondo: #f5f6f7;
+    --rojo: #c0392b;
+    --blanco: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: var(--gris-fondo);
+    color: var(--gris-texto);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* ---------- Botones ---------- */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-primario {
+    background: var(--verde);
+    color: var(--blanco);
+}
+
+.btn-primario:hover:not(:disabled) {
+    background: var(--verde-oscuro);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--verde);
+    color: var(--verde);
+    padding: 0.65rem 1.4rem;
+}
+
+.btn-outline:hover:not(:disabled) {
+    background: var(--verde-claro);
+}
+
+/* ---------- Login / Registro ---------- */
+.pagina-login {
+    min-height: 100vh;
+    background: var(--blanco);
+}
+
+.login-topbar {
+    background: var(--negro);
+    color: var(--blanco);
+    display: flex;
+    gap: 1.5rem;
+    padding: 0.6rem 2rem;
+    font-size: 0.85rem;
+}
+
+.login-contenedor {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-card {
+    width: 100%;
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-top: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+}
+
+.login-card h1 {
+    margin: 0 0 0.25rem;
+    color: var(--negro);
+    font-size: 1.6rem;
+}
+
+.login-subtitulo {
+    margin: 0 0 1.5rem;
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.login-card label,
+.formulario label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--negro);
+    margin-bottom: 0.35rem;
+    margin-top: 0.9rem;
+}
+
+.login-card input,
+.login-card select,
+.formulario input,
+.formulario select {
+    padding: 0.7rem 0.9rem;
+    border-radius: 10px;
+    border: 1.5px solid var(--gris-borde);
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.login-card input:focus,
+.login-card select:focus,
+.formulario input:focus,
+.formulario select:focus {
+    border-color: var(--verde);
+}
+
+.login-card .btn-primario {
+    margin-top: 1.5rem;
+}
+
+.link-recupera {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    color: var(--verde-oscuro);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.login-registro {
+    text-align: center;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.login-registro a {
+    color: var(--verde-oscuro);
+    font-weight: 700;
+}
+
+.registro-card .fila-doble {
+    display: flex;
+    gap: 1rem;
+}
+
+.registro-card .fila-doble > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---------- Logo ---------- */
+.hb-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.hb-logo-dot {
+    width: 34px;
+    height: 34px;
+    border-radius: 50% 50% 50% 0;
+    background: linear-gradient(135deg, #b7d334 0%, var(--verde-oscuro) 60%);
+    display: inline-block;
+}
+
+.hb-logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.hb-logo-text strong {
+    color: var(--negro);
+    font-size: 1.1rem;
+}
+
+.hb-logo-text span {
+    color: var(--verde);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* ---------- Navbar autenticado ---------- */
+.hb-app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.hb-header {
+    background: var(--blanco);
+    border-bottom: 1px solid var(--gris-borde);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.hb-topbar {
+    background: var(--negro);
+    color: var(--blanco);
+    display: flex;
+    gap: 1.5rem;
+    padding: 0.5rem 2rem;
+    font-size: 0.8rem;
+}
+
+.hb-mainbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.hb-nav {
+    display: flex;
+    gap: 1.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.hb-nav a {
+    color: var(--gris-texto);
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+}
+
+.hb-nav a.activo,
+.hb-nav a:hover {
+    color: var(--verde-oscuro);
+    border-bottom-color: var(--verde);
+}
+
+.hb-usuario {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--negro);
+}
+
+.hb-main {
+    flex: 1;
+    padding: 2rem;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* ---------- Contenido general ---------- */
+.contenido-pagina {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.titulo-pagina {
+    margin: 0;
+    color: var(--negro);
+    font-size: 1.8rem;
+}
+
+.subtitulo-pagina {
+    margin: -1rem 0 0;
+    color: #777;
+}
+
+.titulo-seccion {
+    font-size: 1.1rem;
+    color: var(--negro);
+    margin-bottom: 0.8rem;
+}
+
+.saldo-grande {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--verde-oscuro);
+    margin: 0;
+}
+
+.mensaje-error {
+    background: #fdecea;
+    color: var(--rojo);
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.mensaje-exito {
+    background: var(--verde-claro);
+    color: var(--verde-oscuro);
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.mensaje-vacio {
+    color: #999;
+    font-style: italic;
+}
+
+.pantalla-carga {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    color: #999;
+    font-size: 1.1rem;
+}
+
+/* ---------- Cards de cuentas / tarjetas ---------- */
+.grid-tarjetas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.2rem;
+}
+
+.tarjeta-item {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-radius: 14px;
+    padding: 1.2rem;
+    display: block;
+    transition: box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.tarjeta-item:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.tarjeta-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+}
+
+.tarjeta-item-tipo {
+    font-weight: 700;
+    color: var(--negro);
+    font-size: 0.95rem;
+}
+
+.estado-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: var(--gris-borde);
+    color: #555;
+}
+
+.estado-activo,
+.estado-activa {
+    background: var(--verde-claro);
+    color: var(--verde-oscuro);
+}
+
+.estado-inactivo,
+.estado-inactiva,
+.estado-bloqueada,
+.estado-bloqueado {
+    background: #fdecea;
+    color: var(--rojo);
+}
+
+.tarjeta-item-numero {
+    color: #777;
+    font-size: 0.85rem;
+    margin: 0.2rem 0;
+}
+
+.tarjeta-item-saldo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--negro);
+    margin: 0.4rem 0;
+}
+
+.tarjeta-item-detalle {
+    font-size: 0.8rem;
+    color: #999;
+    margin: 0;
+}
+
+.tarjeta-item-linea {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.7rem 0;
+}
+
+.etiqueta {
+    display: block;
+    font-size: 0.75rem;
+    color: #999;
+}
+
+/* ---------- Paneles (detalle cuenta / tarjeta) ---------- */
+.panel-doble {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 1.5rem;
+}
+
+.panel-triple {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.4fr;
+    gap: 1.5rem;
+}
+
+.panel-angosto {
+    max-width: 480px;
+}
+
+.panel {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-radius: 14px;
+    padding: 1.5rem;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+}
+
+.resumen-tarjeta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-radius: 14px;
+    padding: 1.2rem 1.5rem;
+}
+
+.resumen-tarjeta strong {
+    display: block;
+    font-size: 1.15rem;
+    color: var(--negro);
+}
+
+/* ---------- Movimientos ---------- */
+.lista-movimientos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    max-height: 420px;
+    overflow-y: auto;
+}
+
+.lista-movimientos li {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--gris-borde);
+    padding-bottom: 0.7rem;
+    font-size: 0.9rem;
+}
+
+.fecha-movimiento {
+    display: block;
+    color: #999;
+    font-size: 0.75rem;
+}
+
+.descripcion-movimiento {
+    margin: 0.2rem 0 0;
+    color: #666;
+    font-size: 0.8rem;
+}
+
+.montos-movimiento {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    font-weight: 700;
+    color: var(--negro);
+}
+
+.saldo-posterior {
+    font-weight: 400;
+    color: #999;
+    font-size: 0.75rem;
+}
+
+@media (max-width: 900px) {
+    .panel-doble,
+    .panel-triple {
+        grid-template-columns: 1fr;
+    }
+
+    .hb-mainbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
