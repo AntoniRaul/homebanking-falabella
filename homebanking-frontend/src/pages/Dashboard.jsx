@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { listarCuentas } from '../services/cuentaService';
 import { listarTarjetas } from '../services/tarjetaService';
+import { listarCreditos } from '../services/creditoService';
 import CuentaCard from '../components/CuentaCard';
 import TarjetaCard from '../components/TarjetaCard';
+import CreditoCard from '../components/CreditoCard';
 import GraficoPastel from '../components/GraficoPastel';
 import GraficoBarras from '../components/GraficoBarras';
 
@@ -16,18 +18,21 @@ export default function Dashboard() {
     const { cliente } = useAuth();
     const [cuentas, setCuentas] = useState([]);
     const [tarjetas, setTarjetas] = useState([]);
+    const [creditos, setCreditos] = useState([]);
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState('');
 
     useEffect(() => {
         const cargarDatos = async () => {
             try {
-                const [cuentasData, tarjetasData] = await Promise.all([
+                const [cuentasData, tarjetasData, creditosData] = await Promise.all([
                     listarCuentas(cliente.clienteId),
                     listarTarjetas(cliente.clienteId),
+                    listarCreditos(cliente.clienteId),
                 ]);
                 setCuentas(cuentasData);
                 setTarjetas(tarjetasData);
+                setCreditos(creditosData);
             } catch (err) {
                 console.error(err);
                 setError('No pudimos cargar tu información. Intenta de nuevo más tarde.');
@@ -60,6 +65,8 @@ export default function Dashboard() {
         .reduce((acc, c) => acc + Number(c.saldo), 0);
     const totalDeudaTarjetas = tarjetas.reduce((acc, t) => acc + Number(t.deudaActual), 0);
     const totalLineaDisponible = tarjetas.reduce((acc, t) => acc + Number(t.lineaDisponible), 0);
+    const creditosVigentes = creditos.filter((c) => c.estado === 'VIGENTE');
+    const totalDeudaCreditos = creditosVigentes.reduce((acc, c) => acc + Number(c.saldoPendiente), 0);
 
     const datosBarrasTarjetas = tarjetas.map((t) => ({
         nombre: t.numeroTarjetaEnmascarado.slice(-4),
@@ -93,6 +100,10 @@ export default function Dashboard() {
                 <div>
                     <span className="etiqueta">Línea disponible</span>
                     <strong>{formatearMoneda(totalLineaDisponible, 'PEN')}</strong>
+                </div>
+                <div>
+                    <span className="etiqueta">Deuda en créditos</span>
+                    <strong>{formatearMoneda(totalDeudaCreditos, 'PEN')}</strong>
                 </div>
             </div>
 
@@ -149,6 +160,19 @@ export default function Dashboard() {
                     <div className="grid-tarjetas">
                         {tarjetas.map((tarjeta) => (
                             <TarjetaCard key={tarjeta.id} tarjeta={tarjeta} />
+                        ))}
+                    </div>
+                )}
+            </section>
+
+            <section>
+                <h2 className="titulo-seccion">Mis créditos</h2>
+                {creditos.length === 0 ? (
+                    <p className="mensaje-vacio">Aún no tienes créditos activos.</p>
+                ) : (
+                    <div className="grid-tarjetas">
+                        {creditos.map((credito) => (
+                            <CreditoCard key={credito.id} credito={credito} />
                         ))}
                     </div>
                 )}

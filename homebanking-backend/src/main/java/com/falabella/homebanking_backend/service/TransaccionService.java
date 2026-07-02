@@ -2,9 +2,13 @@ package com.falabella.homebanking_backend.service;
 
 import com.falabella.homebanking_backend.dto.TransaccionRequest;
 import com.falabella.homebanking_backend.dto.TransaccionResponse;
+import com.falabella.homebanking_backend.entity.Credito;
+import com.falabella.homebanking_backend.entity.CronogramaPago;
 import com.falabella.homebanking_backend.entity.Cuenta;
 import com.falabella.homebanking_backend.entity.TarjetaCredito;
 import com.falabella.homebanking_backend.entity.Transaccion;
+import com.falabella.homebanking_backend.repository.CreditoRepository;
+import com.falabella.homebanking_backend.repository.CronogramaPagoRepository;
 import com.falabella.homebanking_backend.repository.CuentaRepository;
 import com.falabella.homebanking_backend.repository.TarjetaCreditoRepository;
 import com.falabella.homebanking_backend.repository.TransaccionRepository;
@@ -20,13 +24,19 @@ public class TransaccionService {
     private final CuentaRepository cuentaRepository;
     private final TarjetaCreditoRepository tarjetaRepository;
     private final TransaccionRepository transaccionRepository;
+    private final CreditoRepository creditoRepository;
+    private final CronogramaPagoRepository cronogramaPagoRepository;
 
     public TransaccionService(CuentaRepository cuentaRepository,
                               TarjetaCreditoRepository tarjetaRepository,
-                              TransaccionRepository transaccionRepository) {
+                              TransaccionRepository transaccionRepository,
+                              CreditoRepository creditoRepository,
+                              CronogramaPagoRepository cronogramaPagoRepository) {
         this.cuentaRepository = cuentaRepository;
         this.tarjetaRepository = tarjetaRepository;
         this.transaccionRepository = transaccionRepository;
+        this.creditoRepository = creditoRepository;
+        this.cronogramaPagoRepository = cronogramaPagoRepository;
     }
 
     @Transactional
@@ -37,6 +47,7 @@ public class TransaccionService {
             case "TRANSFERENCIA" -> procesarTransferencia(request);
             case "CONSUMO_TARJETA" -> procesarConsumoTarjeta(request);
             case "PAGO_TARJETA" -> procesarPagoTarjeta(request);
+            case "PAGO_CREDITO" -> procesarPagoCredito(request);
             default -> throw new RuntimeException("Tipo de transaccion invalido");
         };
     }
@@ -114,6 +125,54 @@ public class TransaccionService {
         t.setTarjeta(tarjeta);
         t.setCuenta(cuentaOrigen);
         t.setMonto(montoAPagar);
+        return toResponse(transaccionRepository.save(t));
+    }
+
+    private TransaccionResponse procesarPagoCredito(TransaccionRequest request) {
+        if (request.getCreditoId() == null) {
+            throw new RuntimeException("El credito es obligatorio para esta operacion");
+        }
+
+        Credito credito = creditoRepository.findById(request.getCreditoId())
+                .orElseThrow(() -> new RuntimeException("Credito no encontrado"));
+
+        if (!"VIGENTE".equals(credito.getEstado())) {
+            throw new RuntimeException("El credito no esta vigente");
+        }
+
+        Cuenta cuentaOrigen = obtenerCuentaActiva(request.getCuentaId());
+
+        // Ownership check: la cuenta de pago debe pertenecer al mismo cliente dueño del credito
+        if (!cuentaOrigen.getCliente().getId().equals(credito.getCliente().getId())) {
+            throw new RuntimeException("La cuenta no pertenece al cliente del credito");
+        }
+
+        CronogramaPago cuotaPendiente = cronogramaPagoRepository
+                .findFirstByCreditoIdAndEstadoOrderByNumeroCuotaAsc(credito.getId(), "PENDIENTE")
+                .orElseThrow(() -> new RuntimeException("El credito ya no tiene cuotas pendientes"));
+
+        // El monto a pagar es siempre el de la proxima cuota del cronograma,
+        // sin importar lo que venga en el body: evita pagos parciales o por un monto distinto
+        BigDecimal montoCuota = cuotaPendiente.getCuota();
+        validarSaldoSuficiente(cuentaOrigen.getSaldo(), montoCuota);
+
+        cuentaOrigen.setSaldo(cuentaOrigen.getSaldo().subtract(montoCuota));
+        cuentaRepository.save(cuentaOrigen);
+
+        cuotaPendiente.setEstado("PAGADA");
+        cronogramaPagoRepository.save(cuotaPendiente);
+
+        credito.setCuotasPagadas(credito.getCuotasPagadas() + 1);
+        credito.setSaldoPendiente(cuotaPendiente.getSaldoPosterior());
+        if (credito.getCuotasPagadas().equals(credito.getPlazoMeses())) {
+            credito.setEstado("PAGADO");
+        }
+        creditoRepository.save(credito);
+
+        Transaccion t = nuevaTransaccion(request, cuentaOrigen.getSaldo());
+        t.setCuenta(cuentaOrigen);
+        t.setCredito(credito);
+        t.setMonto(montoCuota);
         return toResponse(transaccionRepository.save(t));
     }
 

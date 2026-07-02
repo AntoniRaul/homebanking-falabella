@@ -530,3 +530,89 @@ button {
         align-items: flex-start;
     }
 }
+
+/* ---------- Solicitud de credito ---------- */
+.monto-slider-valor {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--verde-oscuro);
+    margin: 0.3rem 0;
+}
+
+.slider-monto {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--gris-borde);
+    margin: 0.5rem 0 0.8rem;
+}
+
+.slider-monto::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--verde);
+    border: 3px solid var(--blanco);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+
+.slider-monto::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--verde);
+    border: 3px solid var(--blanco);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+
+.monto-input-fino {
+    max-width: 160px;
+    margin-bottom: 0.5rem;
+}
+
+.checkbox-linea {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--gris-texto);
+    margin: 0.3rem 0 0.8rem;
+}
+
+.checkbox-linea input {
+    width: auto;
+}
+
+.estado-aprobada {
+    background: var(--verde-claro);
+    color: var(--verde-oscuro);
+}
+
+.estado-aprobada_monto_menor {
+    background: #fff4e0;
+    color: #a35b00;
+}
+
+.estado-rechazada {
+    background: #fdecea;
+    color: var(--rojo);
+}
+
+.estado-vigente {
+    background: var(--verde-claro);
+    color: var(--verde-oscuro);
+}
+
+.estado-pagado {
+    background: var(--gris-borde);
+    color: #555;
+}
+
+.estado-atrasado {
+    background: #fdecea;
+    color: var(--rojo);
+}

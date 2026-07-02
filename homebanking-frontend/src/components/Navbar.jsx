@@ -43,6 +43,12 @@ export default function Navbar() {
                     <NavLink to="/transferencias" className={({ isActive }) => (isActive ? 'activo' : '')}>
                         Transferencias
                     </NavLink>
+                    <NavLink to="/creditos/solicitar" className={({ isActive }) => (isActive ? 'activo' : '')}>
+                        Créditos
+                    </NavLink>
+                    <NavLink to="/creditos" className={({ isActive }) => (isActive ? 'activo' : '')}>
+                        Créditos
+                    </NavLink>
                 </nav>
 
                 <div className="hb-usuario">

@@ -34,8 +34,13 @@ public class Transaccion {
     @JoinColumn(name = "cuenta_destino_id")
     private Cuenta cuentaDestino;
 
+    // Se usa solo para PAGO_CREDITO
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "credito_id")
+    private Credito credito;
+
     @NotBlank
-    @Pattern(regexp = "DEPOSITO|RETIRO|TRANSFERENCIA|CONSUMO_TARJETA|PAGO_TARJETA")
+    @Pattern(regexp = "DEPOSITO|RETIRO|TRANSFERENCIA|CONSUMO_TARJETA|PAGO_TARJETA|PAGO_CREDITO")
     @Column(nullable = false, length = 30)
     private String tipo;
 

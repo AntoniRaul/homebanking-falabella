@@ -3,6 +3,10 @@ import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import LayoutHomeBanking from './components/LayoutHomeBanking';
 
+import SolicitarCredito from './pages/SolicitarCredito';
+import Creditos from './pages/Creditos';
+import CreditoDetalle from './pages/CreditoDetalle';
+
 import Login from './pages/Login';
 import Registro from './pages/Registro';
 import Dashboard from './pages/Dashboard';
@@ -36,6 +40,9 @@ function App() {
             <Route path="/cuentas/:id" element={<CuentaDetalle />} />
             <Route path="/tarjetas" element={<Tarjetas />} />
             <Route path="/tarjetas/:id" element={<TarjetaDetalle />} />
+            <Route path="/creditos" element={<Creditos />} />
+            <Route path="/creditos/:id" element={<CreditoDetalle />} />
+            <Route path="/creditos/solicitar" element={<SolicitarCredito />} />
             <Route path="/transferencias" element={<Transferencias />} />
           </Route>
 
